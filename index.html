@@ -59,11 +59,26 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        /* Popup Styles */
+        .popup {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            display: none;
+            z-index: 10;
+        }
     </style>
     </head>
     <body>
-        <h2>Agents of change!!</h2>
-        <video controls>
+        <h2>AI Training</h2>
+        <video id="myVideo" controls>
             <source src="my-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -82,6 +97,12 @@
             </div>
         </div>
 
+        <!-- Popup Message -->
+        <div id="popup" class="popup">
+            A black box AI is an AI system whose internal workings are a mystery
+            to its users
+        </div>
+
         <script>
         let questions = [
             "What is your name?",
@@ -96,6 +117,18 @@
 
         let currentQuestion = 0;
         let answers = JSON.parse(localStorage.getItem("chatAnswers")) || {}; // Load previous answers
+
+        // Show popup at 7 seconds in video
+        const video = document.getElementById("myVideo");
+        const popup = document.getElementById("popup");
+
+        video.addEventListener("timeupdate", function() {
+            if (video.currentTime >= 7 && video.currentTime < 11) {
+                popup.style.display = "block"; // Show popup
+            } else {
+                popup.style.display = "none"; // Hide popup after 4 seconds
+            }
+        });
 
         function toggleChat() {
             let chatContainer = document.getElementById("chatContainer");
@@ -145,13 +178,13 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Enable pressing Enter to send messages
-        document.getElementById("userInput").addEventListener("keypress", function(event) {
+        // Listen for Enter key press
+        document.getElementById("userInput").addEventListener("keydown", function(event) {
             if (event.key === "Enter") {
-                event.preventDefault(); // Prevents new line in input field
-                sendMessage();
+                event.preventDefault(); // Prevent form submission if in a form
+                sendMessage(); // Call sendMessage when Enter is pressed
             }
         });
-    </script>
+        </script>
     </body>
 </html>
