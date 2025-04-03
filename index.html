@@ -62,7 +62,7 @@
     </style>
     </head>
     <body>
-        <h2>My Video Player</h2>
+        <h2>AI Training</h2>
         <video controls>
             <source src="my-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
@@ -144,6 +144,14 @@
             document.getElementById("userInput").value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+
+        // Enable pressing Enter to send messages
+        document.getElementById("userInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevents new line in input field
+                sendMessage();
+            }
+        });
     </script>
     </body>
 </html>
