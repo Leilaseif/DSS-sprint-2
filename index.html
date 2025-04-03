@@ -80,6 +80,24 @@
             color: #000;
             font-size: 16px;
         }
+
+        /* Rating Stars Styles */
+        .rating-container {
+            display: none;
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            z-index: 20;
+        }
+        .rating-container span {
+            cursor: pointer;
+            color: #ccc;
+        }
+        .rating-container span.selected {
+            color: gold;
+        }
     </style>
     </head>
     <body>
@@ -109,6 +127,15 @@
             to its users
         </div>
 
+        <!-- Rating Stars -->
+        <div id="ratingContainer" class="rating-container">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+        </div>
+
         <script>
         let questions = [
             "What is your name?",
@@ -128,6 +155,7 @@
         // Show popup at 7 seconds in video
         const video = document.getElementById("myVideo");
         const popup = document.getElementById("popup");
+        const ratingContainer = document.getElementById("ratingContainer");
 
         // Display text in chatbot at 36 seconds
         const chatBox = document.getElementById("chatBox");
@@ -143,6 +171,12 @@
             if (video.currentTime >= 36 && video.currentTime < 40 && !messageDisplayed) {
                 chatBox.innerHTML += `<p class="bot-message"><strong>Bot:</strong> AI training datasets are collections of data used to teach models how to make predictions. Selecting poor or biased data can lead to inaccurate, unfair, or unreliable AI outputs. Risks include amplifying societal biases, spreading misinformation, and ethical concerns around privacy.</p>`;
                 messageDisplayed = true; // Mark message as displayed
+            }
+
+            // Show the rating stars when the video finishes, even if previously rated
+            if (video.ended) {
+                ratingContainer.style.display = "block"; // Show rating container
+                localStorage.removeItem("videoRated"); // Remove the rating flag to allow showing stars again
             }
         });
 
@@ -201,6 +235,27 @@
                 sendMessage(); // Call sendMessage when Enter is pressed
             }
         });
-        </script>
+
+        // Add click listener to stars for rating
+        document.querySelectorAll(".star").forEach(star => {
+            star.addEventListener("click", function() {
+                let rating = parseInt(star.getAttribute("data-value"));
+                saveRating(rating);
+            });
+        });
+
+        // Save rating to localStorage
+        function saveRating(rating) {
+            localStorage.setItem("videoRating", rating); // Save rating
+            localStorage.setItem("videoRated", true); // Mark video as rated
+            alert(`Thank you for rating! You rated the video ${rating} stars.`); // Feedback
+            ratingContainer.style.display = "none"; // Hide rating stars after rating
+        }
+
+        // Check if video has been rated before loading
+        window.onload = function() {
+            // Nothing needs to be done for this, because we remove the "videoRated" flag after video ends
+        };
+    </script>
     </body>
 </html>
