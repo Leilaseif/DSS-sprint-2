@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Video Player</title>
+        <title>Video Player with Guided Chatbot</title>
         <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,6 +16,49 @@
             border: 3px solid black;
             border-radius: 10px;
         }
+        /* Chatbot Styles */
+        .chat-container {
+            width: 300px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+        }
+        .chat-box {
+            height: 200px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+            padding: 5px;
+        }
+        .input-box {
+            display: flex;
+            margin-top: 5px;
+        }
+        .input-box input {
+            width: 80%;
+            padding: 5px;
+        }
+        .input-box button {
+            width: 20%;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 330px;
+            background: blue;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
     </head>
     <body>
@@ -24,5 +67,83 @@
             <source src="my-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+
+        <!-- Chatbot Button -->
+        <button class="chat-toggle" onclick="toggleChat()">Chat</button>
+
+        <!-- Chatbot Section -->
+        <div class="chat-container" id="chatContainer" style="display: none;">
+            <h3>Chatbot</h3>
+            <div class="chat-box" id="chatBox"></div>
+            <div class="input-box">
+                <input type="text" id="userInput"
+                    placeholder="Type your answer...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+        <script>
+        let questions = [
+            "What is your name?",
+            "How are you feeling today?",
+            "What is your favorite movie?",
+            "Where are you from?",
+            "Do you like watching videos?",
+            "What topic interests you the most?",
+            "What do you hope to learn today?",
+            "Any final thoughts before we end?"
+        ];
+
+        let currentQuestion = 0;
+        let answers = JSON.parse(localStorage.getItem("chatAnswers")) || {}; // Load previous answers
+
+        function toggleChat() {
+            let chatContainer = document.getElementById("chatContainer");
+            if (chatContainer.style.display === "none") {
+                chatContainer.style.display = "block";
+                startChat();
+            } else {
+                chatContainer.style.display = "none";
+            }
+        }
+
+        function startChat() {
+            let chatBox = document.getElementById("chatBox");
+            chatBox.innerHTML = ""; // Clear chat
+            currentQuestion = 0;
+            showNextQuestion();
+        }
+
+        function showNextQuestion() {
+            if (currentQuestion < questions.length) {
+                document.getElementById("chatBox").innerHTML += `<p><strong>Bot:</strong> ${questions[currentQuestion]}</p>`;
+            } else {
+                document.getElementById("chatBox").innerHTML += `<p><strong>Bot:</strong> Thank you for chatting with me! 😊</p>`;
+                console.log("Saved Answers:", answers); // Debugging: See answers in browser console
+                localStorage.setItem("chatAnswers", JSON.stringify(answers)); // Save to local storage
+            }
+        }
+
+        function sendMessage() {
+            let userInput = document.getElementById("userInput").value.trim();
+            let chatBox = document.getElementById("chatBox");
+
+            if (userInput === "") return;
+
+            // Store answer
+            answers[questions[currentQuestion]] = userInput;
+
+            // Display user message
+            chatBox.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+
+            // Move to next question
+            currentQuestion++;
+            setTimeout(showNextQuestion, 500);
+
+            // Clear input
+            document.getElementById("userInput").value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
     </body>
 </html>
