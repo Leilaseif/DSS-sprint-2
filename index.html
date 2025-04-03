@@ -74,6 +74,12 @@
             display: none;
             z-index: 10;
         }
+
+        /* Chatbot Message Styles */
+        .bot-message {
+            color: #000;
+            font-size: 16px;
+        }
     </style>
     </head>
     <body>
@@ -117,16 +123,26 @@
 
         let currentQuestion = 0;
         let answers = JSON.parse(localStorage.getItem("chatAnswers")) || {}; // Load previous answers
+        let messageDisplayed = false; // Flag to track if the message has already been shown
 
         // Show popup at 7 seconds in video
         const video = document.getElementById("myVideo");
         const popup = document.getElementById("popup");
+
+        // Display text in chatbot at 36 seconds
+        const chatBox = document.getElementById("chatBox");
 
         video.addEventListener("timeupdate", function() {
             if (video.currentTime >= 7 && video.currentTime < 11) {
                 popup.style.display = "block"; // Show popup
             } else {
                 popup.style.display = "none"; // Hide popup after 4 seconds
+            }
+
+            // Show the chatbot message at 36 seconds and hold it there
+            if (video.currentTime >= 36 && video.currentTime < 40 && !messageDisplayed) {
+                chatBox.innerHTML += `<p class="bot-message"><strong>Bot:</strong> AI training datasets are collections of data used to teach models how to make predictions. Selecting poor or biased data can lead to inaccurate, unfair, or unreliable AI outputs. Risks include amplifying societal biases, spreading misinformation, and ethical concerns around privacy.</p>`;
+                messageDisplayed = true; // Mark message as displayed
             }
         });
 
