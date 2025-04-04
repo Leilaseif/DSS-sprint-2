@@ -172,6 +172,41 @@ video {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Info Popup */
+.info-popup {
+    position: absolute;
+    top: 10%;
+    /* Position it near the top of the video */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    /* Dark background for contrast */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    /* Subtle shadow */
+    z-index: 1000;
+    /* Ensure it appears above other elements */
+    transition: all 0.3s ease;
+    /* Smooth transition for hover effects */
+}
+
+.info-popup .info-sign {
+    font-size: 16px;
+    margin-left: 5px;
+    color: #00bfff;
+    /* Light blue for the info sign */
+    cursor: pointer;
+}
+
+.info-popup:hover {
+    background: rgba(0, 0, 0, 0.9);
+    /* Slightly darker on hover */
+}
+
 @media (max-width: 768px) {
     video {
         width: 100%;

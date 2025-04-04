@@ -28,26 +28,24 @@ video.addEventListener("ended", () => {
     darkOverlay.style.display = "block"; // Darken the background after video ends
 });
 
-// Add the popup logic here
-video.addEventListener("timeupdate", () => {
-    if (Math.floor(video.currentTime) === 7) {
-        showVideoPopup();
-    }
-});
-
 if (window.location.pathname.includes('index.html')) {
-    // Logic for Page A
+    console.log("Page A logic executed");
     video.addEventListener("timeupdate", () => {
+        if (Math.floor(video.currentTime) === 7) {
+            console.log("Page A: showVideoPopup triggered");
+            showVideoPopup();
+        }
         if (Math.floor(video.currentTime) === 36) {
-            showChatbotMessage(); // Page A functionality
+            console.log("Page A: showChatbotMessage triggered");
+            showChatbotMessage();
         }
     });
 } else if (window.location.pathname.includes('page-b.html')) {
-    // Logic for Page B
+    console.log("Page B logic executed");
     video.addEventListener("timeupdate", () => {
-        if (Math.floor(video.currentTime) === 36) {
-            // Placeholder for Page B functionality
-            console.log("Page B: Something else happens at second 36");
+        if (Math.floor(video.currentTime) === 7) {
+            console.log("Page B: showInfoPopup triggered");
+            showInfoPopup();
         }
     });
 }
@@ -81,6 +79,45 @@ function showVideoPopup() {
     setTimeout(() => {
         popup.remove();
     }, 4000); // Lasts for 4 seconds
+}
+
+function showInfoPopup() {
+    // Check if the popup already exists to avoid duplicates
+    if (document.getElementById("infoPopup")) return;
+
+    // Create the popup element
+    const popup = document.createElement("div");
+    popup.id = "infoPopup";
+    popup.className = "info-popup";
+
+    // Add the title with an info sign
+    const title = document.createElement("div");
+    title.innerHTML = `AI Blackbox <span class="info-sign">ℹ️</span>`;
+    title.style.fontWeight = "bold";
+    title.style.marginBottom = "5px";
+
+    // Add the detailed information
+    const details = document.createElement("div");
+    details.textContent = "Hover over the info sign for more details.";
+
+    // Add hover functionality to the info sign
+    const infoSign = title.querySelector(".info-sign");
+    infoSign.style.cursor = "pointer";
+    infoSign.title = "A black box AI is an AI system whose internal workings are a mystery to its users. Users can see the system’s inputs and outputs, but they can’t see what happens within the AI tool to produce those outputs.";
+
+    // Append the title and details to the popup
+    popup.appendChild(title);
+    popup.appendChild(details);
+
+    // Append the popup to the video container
+    const videoContainer = document.querySelector(".video-container");
+    videoContainer.style.position = "relative"; // Ensure the container is positioned
+    videoContainer.appendChild(popup);
+
+    // Remove the popup after 10 seconds
+    setTimeout(() => {
+        popup.remove();
+    }, 10000); // Lasts for 10 seconds
 }
 
 function showChatbotMessage() {
