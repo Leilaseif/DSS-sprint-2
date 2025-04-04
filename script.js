@@ -21,7 +21,10 @@ const submitRatingButton = document.getElementById("submitRating");
 const darkOverlay = document.getElementById("darkOverlay");
 
 video.addEventListener("ended", () => {
-    ratingContainer.style.display = "block";
+    ratingContainer.style.display = "block"; // Make the container visible
+    setTimeout(() => {
+        ratingContainer.classList.add("show"); // Add the animation class after making it visible
+    }, 10); // Small delay to ensure the transition works
     darkOverlay.style.display = "block"; // Darken the background after video ends
 });
 
@@ -29,6 +32,12 @@ video.addEventListener("ended", () => {
 video.addEventListener("timeupdate", () => {
     if (Math.floor(video.currentTime) === 7) {
         showVideoPopup();
+    }
+});
+
+video.addEventListener("timeupdate", () => {
+    if (Math.floor(video.currentTime) === 36) {
+        showChatbotMessage();
     }
 });
 
@@ -61,6 +70,21 @@ function showVideoPopup() {
     setTimeout(() => {
         popup.remove();
     }, 4000); // Lasts for 4 seconds
+}
+
+function showChatbotMessage() {
+    // Check if the message already exists to avoid duplicates
+    const chatBox = document.getElementById("chatBox");
+    if (document.getElementById("chatbotMessage")) return;
+
+    // Create the chatbot message
+    const message = document.createElement("p");
+    message.id = "chatbotMessage";
+    message.innerHTML = `<strong>Bot:</strong> AI training datasets are collections of data used to teach models how to make predictions. Selecting poor or biased data can lead to inaccurate, unfair, or unreliable AI outputs. Risks include amplifying societal biases, spreading misinformation, and ethical concerns around privacy. Ensuring diverse, high-quality datasets is critical for building trustworthy and effective AI systems.`;
+
+    // Append the message to the chatbox
+    chatBox.appendChild(message);
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom of the chatbox
 }
 
 stars.forEach(star => {
@@ -123,6 +147,14 @@ function sendMessage() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+// Add event listener for the Enter key in the input box
+const userInput = document.getElementById("userInput");
+userInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        sendMessage(); // Trigger the sendMessage function
+    }
+});
+
 // Thank you popup logic
 function showPopup() {
     let thankYouMessage = document.getElementById("thankYouMessage");
@@ -144,3 +176,24 @@ function askForFriendInfo() {
     alert(`Thanks! I’ll share your ${rating}-star rating with ${friendName} (${friendNumber}).`);
     document.getElementById("thankYouPopup").style.display = "none";
 }
+
+// CSS for star rating
+const style = document.createElement("style");
+style.textContent = `
+.star {
+    font-size: 40px;
+    color: gray;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.star:hover {
+    color: gold;
+    transform: scale(1.2); /* Slight zoom effect */
+}
+
+.star.selected {
+    color: gold;
+}
+`;
+document.head.appendChild(style);
