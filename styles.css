@@ -216,3 +216,25 @@ h2 {
     /* Add a subtle shadow */
     margin-bottom: 20px;
 }
+
+/* Switch Button */
+.switch-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    /* Ensure it stays above other elements */
+}
+
+.switch-button:hover {
+    background: #0056b3;
+    /* Darker blue on hover */
+}

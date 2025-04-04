@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Video Player with Chatbot and Rating - Page B</title>
+        <link rel="stylesheet" href="styles.css">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+            rel="stylesheet">
+    </head>
+    <body>
+        <button class="switch-button" onclick="location.href='index.html'">Go to
+            Page A</button>
+        <h2>AI Training</h2>
+
+        <!-- Video Player -->
+        <div class="video-container">
+            <video id="videoPlayer" width="80%" controls>
+                <source src="my-video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Dark overlay -->
+        <div class="dark-overlay" id="darkOverlay"></div>
+
+        <!-- Chatbot Section -->
+        <button class="chat-toggle" onclick="toggleChat()">Chat</button>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <img src="dss-logo.jpg" alt="DSS Logo" class="footer-logo">
+            <p class="footer-text">© 2025 AI Training Platform. All rights
+                reserved.</p>
+        </footer>
+    </body>
+</html>

@@ -35,11 +35,22 @@ video.addEventListener("timeupdate", () => {
     }
 });
 
-video.addEventListener("timeupdate", () => {
-    if (Math.floor(video.currentTime) === 36) {
-        showChatbotMessage();
-    }
-});
+if (window.location.pathname.includes('index.html')) {
+    // Logic for Page A
+    video.addEventListener("timeupdate", () => {
+        if (Math.floor(video.currentTime) === 36) {
+            showChatbotMessage(); // Page A functionality
+        }
+    });
+} else if (window.location.pathname.includes('page-b.html')) {
+    // Logic for Page B
+    video.addEventListener("timeupdate", () => {
+        if (Math.floor(video.currentTime) === 36) {
+            // Placeholder for Page B functionality
+            console.log("Page B: Something else happens at second 36");
+        }
+    });
+}
 
 function showVideoPopup() {
     // Check if the popup already exists to avoid duplicates
