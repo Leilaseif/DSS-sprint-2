@@ -30,28 +30,25 @@ video.addEventListener("ended", () => {
 
 if (window.location.pathname.includes('index.html')) {
     console.log("Page A logic executed");
+
+    let chatTriggered = false; // Flag to prevent multiple executions
+
     video.addEventListener("timeupdate", () => {
         if (Math.floor(video.currentTime) === 7) {
             console.log("Page A: showVideoPopup triggered");
             showVideoPopup();
         }
-        if (Math.floor(video.currentTime) === 36) {
-            console.log("Page A: showChatbotMessage triggered");
-            showChatbotMessage();
+        if (Math.floor(video.currentTime) === 36 && !chatTriggered) {
+            console.log("Page A: openChatAndShowMessage triggered");
+            openChatAndShowMessage(); // Open chatbot and display the message
+            chatTriggered = true; // Set the flag to true to prevent re-triggering
         }
     });
 } else if (window.location.pathname.includes('page-b.html')) {
     console.log("Page B logic executed");
 
-    // Add event listener for the Enter key in the input box
-    const userInput = document.getElementById("userInput");
-    userInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-            sendMessage(); // Trigger the sendMessage function
-        }
-    });
-
     let chatTriggered = false; // Flag to prevent multiple executions
+
     video.addEventListener("timeupdate", () => {
         if (Math.floor(video.currentTime) === 7) {
             console.log("Page B: showInfoPopup triggered");
@@ -62,6 +59,11 @@ if (window.location.pathname.includes('index.html')) {
             openChatWithMessage(); // Open chatbot with a specific message
             chatTriggered = true; // Set the flag to true to prevent re-triggering
         }
+    });
+
+    video.addEventListener("ended", () => {
+        console.log("Page B: Video ended, triggering chatbot feedback");
+        askForFeedback(); // Trigger the chatbot feedback interaction
     });
 }
 
@@ -150,6 +152,20 @@ function showChatbotMessage() {
     chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom of the chatbox
 }
 
+function openChatAndShowMessage() {
+    const chatContainer = document.getElementById("chatContainer");
+    const chatBox = document.getElementById("chatBox");
+
+    // Ensure the chat container is visible
+    chatContainer.style.display = "block";
+
+    // Add the message to the chatbox
+    chatBox.innerHTML += `<p><strong>Bot:</strong> AI training datasets are collections of data used to teach models how to make predictions. Selecting poor or biased data can lead to inaccurate, unfair, or unreliable AI outputs. Risks include amplifying societal biases, spreading misinformation, and ethical concerns around privacy. Ensuring diverse, high-quality datasets is critical for building trustworthy and effective AI systems.</p>`;
+
+    // Scroll to the bottom of the chatbox
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
 function openChatWithMessage() {
     // Ensure the chat container is visible
     const chatContainer = document.getElementById("chatContainer");
@@ -193,21 +209,80 @@ function openChatWithMessage() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-stars.forEach(star => {
-    star.addEventListener("click", function () {
-        rating = this.getAttribute("data-index");
-        stars.forEach((star, index) => {
-            star.style.color = index < rating ? "gold" : "gray";
-        });
-        submitRatingButton.style.display = "block"; // Show submit button
-    });
-});
+function askForFeedback() {
+    const chatContainer = document.getElementById("chatContainer");
+    const chatBox = document.getElementById("chatBox");
 
-submitRatingButton.addEventListener("click", () => {
-    localStorage.setItem("rating", rating);
-    showPopup();
-    ratingContainer.style.display = "none";
-    darkOverlay.style.display = "none"; // Hide rating after submission
+    // Ensure the chat container is visible
+    chatContainer.style.display = "block";
+
+    // Add the like/dislike question to the chatbox
+    chatBox.innerHTML += `<p><strong>Bot:</strong> Did you like this video? <button id="likeButton" style="margin-right: 10px;">👍 Like</button><button id="dislikeButton">👎 Dislike</button></p>`;
+
+    // Add event listeners for the Like and Dislike buttons
+    const likeButton = document.getElementById("likeButton");
+    const dislikeButton = document.getElementById("dislikeButton");
+
+    likeButton.addEventListener("click", () => {
+        chatBox.innerHTML += `<p><strong>You:</strong> 👍 Like</p>`;
+        chatBox.innerHTML += `<p><strong>Bot:</strong> Let's discuss why you liked this video. Have feedback? Tap me anytime!</p>`;
+        addFeedbackInput(chatBox, "liked"); // Display thank-you message
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+    });
+
+    dislikeButton.addEventListener("click", () => {
+        chatBox.innerHTML += `<p><strong>You:</strong> 👎 Dislike</p>`;
+        chatBox.innerHTML += `<p><strong>Bot:</strong> Let's discuss why you didn't like this video. Have feedback? Tap me anytime!</p>`;
+        addFeedbackInput(chatBox, "didn't like"); // Display thank-you message
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+    });
+
+    // Scroll to the bottom of the chatbox
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function addFeedbackInput(chatBox, feedbackType) {
+    // Directly display a thank-you message without creating input fields or buttons
+    chatBox.innerHTML += `<p><strong>Bot:</strong> Thank you for your feedback! 😊</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const stars = document.querySelectorAll(".star");
+    const submitRatingButton = document.getElementById("submitRating");
+    const darkOverlay = document.getElementById("darkOverlay");
+    const ratingContainer = document.getElementById("ratingContainer");
+
+    let rating = 0; // Initialize the rating variable
+
+    stars.forEach(star => {
+        star.addEventListener("click", function () {
+            rating = parseInt(this.getAttribute("data-index")); // Update the rating variable
+            stars.forEach((star, index) => {
+                star.style.color = index < rating ? "gold" : "gray";
+            });
+            submitRatingButton.style.display = "block"; // Show submit button
+        });
+    });
+
+    submitRatingButton.addEventListener("click", () => {
+        localStorage.setItem("rating", rating); // Save the rating to localStorage
+        showPopup(rating); // Pass the rating to the showPopup function
+        ratingContainer.style.display = "none";
+        darkOverlay.style.display = "none"; // Hide rating after submission
+    });
+
+    const userInput = document.getElementById("userInput");
+
+    if (userInput) {
+        userInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                sendMessage(); // Trigger the sendMessage function
+            }
+        });
+    } else {
+        console.error("Element with id 'userInput' not found in the DOM.");
+    }
 });
 
 // Chatbot logic
@@ -262,9 +337,9 @@ userInput.addEventListener("keydown", (event) => {
 });
 
 // Thank you popup logic
-function showPopup() {
+function showPopup(rating) {
     let thankYouMessage = document.getElementById("thankYouMessage");
-    thankYouMessage.textContent = `I can share your ${rating}-star rating with your friends.`;
+    thankYouMessage.textContent = `I can share your ${rating}-star rating with your friends.`; // Use the passed rating
     document.getElementById("thankYouPopup").style.display = "block";
 
     document.getElementById("yesButton").addEventListener("click", askForFriendInfo);
