@@ -42,10 +42,25 @@ if (window.location.pathname.includes('index.html')) {
     });
 } else if (window.location.pathname.includes('page-b.html')) {
     console.log("Page B logic executed");
+
+    // Add event listener for the Enter key in the input box
+    const userInput = document.getElementById("userInput");
+    userInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            sendMessage(); // Trigger the sendMessage function
+        }
+    });
+
+    let chatTriggered = false; // Flag to prevent multiple executions
     video.addEventListener("timeupdate", () => {
         if (Math.floor(video.currentTime) === 7) {
             console.log("Page B: showInfoPopup triggered");
-            showInfoPopup();
+            showInfoPopup(); // Page B info popup
+        }
+        if (Math.floor(video.currentTime) === 36 && !chatTriggered) {
+            console.log("Page B: openChatWithMessage triggered");
+            openChatWithMessage(); // Open chatbot with a specific message
+            chatTriggered = true; // Set the flag to true to prevent re-triggering
         }
     });
 }
@@ -133,6 +148,49 @@ function showChatbotMessage() {
     // Append the message to the chatbox
     chatBox.appendChild(message);
     chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom of the chatbox
+}
+
+function openChatWithMessage() {
+    // Ensure the chat container is visible
+    const chatContainer = document.getElementById("chatContainer");
+    chatContainer.style.display = "block";
+
+    // Add the initial message to the chatbox
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML += `<p><strong>Bot:</strong> Do you want to know more about AI training datasets?</p>`;
+
+    // Add Yes/No buttons
+    const buttonContainer = document.createElement("div");
+    buttonContainer.id = "chatButtons";
+    buttonContainer.style.marginTop = "10px";
+
+    const yesButton = document.createElement("button");
+    yesButton.textContent = "Yes";
+    yesButton.style.marginRight = "10px";
+    yesButton.style.padding = "5px 10px";
+    yesButton.style.cursor = "pointer";
+    yesButton.addEventListener("click", () => {
+        // Show the detailed message when "Yes" is clicked
+        chatBox.innerHTML += `<p><strong>Bot:</strong> AI training datasets are collections of data used to teach models how to make predictions. Selecting poor or biased data can lead to inaccurate, unfair, or unreliable AI outputs. Risks include amplifying societal biases, spreading misinformation, and ethical concerns around privacy. Ensuring diverse, high-quality datasets is critical for building trustworthy and effective AI systems.</p>`;
+        buttonContainer.remove(); // Remove the buttons after the response
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+    });
+
+    const noButton = document.createElement("button");
+    noButton.textContent = "No";
+    noButton.style.padding = "5px 10px";
+    noButton.style.cursor = "pointer";
+    noButton.addEventListener("click", () => {
+        // Do nothing when "No" is clicked
+        buttonContainer.remove(); // Remove the buttons
+    });
+
+    buttonContainer.appendChild(yesButton);
+    buttonContainer.appendChild(noButton);
+    chatBox.appendChild(buttonContainer);
+
+    // Scroll to the bottom of the chatbox
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 stars.forEach(star => {
