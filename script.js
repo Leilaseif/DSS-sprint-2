@@ -39,13 +39,17 @@ if (window.location.pathname.includes('index.html')) {
             const chatBox = document.getElementById("chatBox");
 
             // Ensure the chat container is visible
-            chatContainer.style.display = "block";
+            if (chatContainer) {
+                chatContainer.style.display = "block";
 
-            // Add "researching..." message
-            chatBox.innerHTML += `<p><strong>Bot:</strong> Researching...</p>`;
-            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+                // Add "researching..." message
+                chatBox.innerHTML += `<p><strong>Bot:</strong> Researching...</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
 
-            chatTriggered = true; // Prevent re-triggering
+                chatTriggered = true; // Prevent re-triggering
+            } else {
+                console.error("Chat container not found in the DOM.");
+            }
         }
 
         if (Math.floor(video.currentTime) === 35 && !aiTextTriggered) {
@@ -67,14 +71,18 @@ if (window.location.pathname.includes('index.html')) {
             const chatBox = document.getElementById("chatBox");
 
             // Add the links to the chatbox
-            chatBox.innerHTML += `
-                <p><strong>Bot:</strong> Here are some useful resources:</p>
-                <p><a href="https://www.anolytics.ai/blog/the-impact-of-unrepresentative-data-on-ai-model-biases/" target="_blank" style="color: blue;">https://www.anolytics.ai/blog/the-impact-of-unrepresentative-data-on-ai-model-biases/</a></p>
-                <p><a href="https://www.twoday.com/blog/the-dangers-of-poor-data-quality-in-ai-systems" target="_blank" style="color: blue;">https://www.twoday.com/blog/the-dangers-of-poor-data-quality-in-ai-systems</a></p>
-            `;
-            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+            if (chatBox) {
+                chatBox.innerHTML += `
+                    <p><strong>Bot:</strong> Here are some useful resources:</p>
+                    <p><a href="https://www.anolytics.ai/blog/the-impact-of-unrepresentative-data-on-ai-model-biases/" target="_blank" style="color: blue;">https://www.anolytics.ai/blog/the-impact-of-unrepresentative-data-on-ai-model-biases/</a></p>
+                    <p><a href="https://www.twoday.com/blog/the-dangers-of-poor-data-quality-in-ai-systems" target="_blank" style="color: blue;">https://www.twoday.com/blog/the-dangers-of-poor-data-quality-in-ai-systems</a></p>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
 
-            linksTriggered = true; // Prevent re-triggering
+                linksTriggered = true; // Prevent re-triggering
+            } else {
+                console.error("Chat box not found in the DOM.");
+            }
         }
     });
 } else if (window.location.pathname.includes('page-b.html')) {
