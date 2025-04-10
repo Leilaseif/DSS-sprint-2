@@ -1,12 +1,5 @@
 let questions = [
-    "What is your name?",
-    "How are you feeling today?",
-    "What is your favorite movie?",
-    "Where are you from?",
-    "Do you like watching videos?",
-    "What topic interests you the most?",
-    "What do you hope to learn today?",
-    "Any final thoughts before we end?"
+    "do you want to speack with me?"
 ];
 
 let currentQuestion = 0;
@@ -32,16 +25,56 @@ if (window.location.pathname.includes('index.html')) {
     console.log("Page A logic executed");
 
     let chatTriggered = false; // Flag to prevent multiple executions
+    let linksTriggered = false; // Flag to prevent multiple executions for links
+    let aiTextTriggered = false; // Flag to prevent multiple executions for AI text
 
     video.addEventListener("timeupdate", () => {
         if (Math.floor(video.currentTime) === 7) {
             console.log("Page A: showVideoPopup triggered");
             showVideoPopup();
         }
-        if (Math.floor(video.currentTime) === 36 && !chatTriggered) {
-            console.log("Page A: openChatAndShowMessage triggered");
-            openChatAndShowMessage(); // Open chatbot and display the message
-            chatTriggered = true; // Set the flag to true to prevent re-triggering
+        if (Math.floor(video.currentTime) === 34 && !chatTriggered) {
+            console.log("Page A: Chatbot triggered with 'researching...'");
+            const chatContainer = document.getElementById("chatContainer");
+            const chatBox = document.getElementById("chatBox");
+
+            // Ensure the chat container is visible
+            chatContainer.style.display = "block";
+
+            // Add "researching..." message
+            chatBox.innerHTML += `<p><strong>Bot:</strong> Researching...</p>`;
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+            chatTriggered = true; // Prevent re-triggering
+        }
+
+        if (Math.floor(video.currentTime) === 35 && !aiTextTriggered) {
+            console.log("Page A: Chatbot shows AI training datasets text");
+            const chatBox = document.getElementById("chatBox");
+
+            // Add the AI training datasets text
+            chatBox.innerHTML += `
+                <p><strong>Bot:</strong> AI training datasets are collections of data used to teach models how to make predictions. Selecting poor or biased data can lead to inaccurate, unfair, or unreliable AI outputs. Risks include amplifying societal biases, spreading misinformation, and ethical concerns around privacy. Ensuring diverse, high-quality datasets is critical for building trustworthy and effective AI systems.</p>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+            aiTextTriggered = true; // Prevent re-triggering
+        }
+
+        if (Math.floor(video.currentTime) === 37 && !linksTriggered) {
+            console.log("Page A: Chatbot shows links");
+
+            const chatBox = document.getElementById("chatBox");
+
+            // Add the links to the chatbox
+            chatBox.innerHTML += `
+                <p><strong>Bot:</strong> Here are some useful resources:</p>
+                <p><a href="https://www.anolytics.ai/blog/the-impact-of-unrepresentative-data-on-ai-model-biases/" target="_blank" style="color: blue;">https://www.anolytics.ai/blog/the-impact-of-unrepresentative-data-on-ai-model-biases/</a></p>
+                <p><a href="https://www.twoday.com/blog/the-dangers-of-poor-data-quality-in-ai-systems" target="_blank" style="color: blue;">https://www.twoday.com/blog/the-dangers-of-poor-data-quality-in-ai-systems</a></p>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+            linksTriggered = true; // Prevent re-triggering
         }
     });
 } else if (window.location.pathname.includes('page-b.html')) {
@@ -247,6 +280,40 @@ function addFeedbackInput(chatBox, feedbackType) {
     chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
 }
 
+function askPostRatingQuestions() {
+    const chatContainer = document.getElementById("chatContainer");
+    const chatBox = document.getElementById("chatBox");
+
+    // Ensure the chat container is visible
+    chatContainer.style.display = "block";
+
+    // Ask the first question
+    chatBox.innerHTML += `<p><strong>Bot:</strong> How do you feel about the challenges of understanding AI decisions in fields like healthcare or criminal justice?</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+    // Wait for the user to respond, then ask the next question
+    const userInput = document.getElementById("userInput");
+    userInput.addEventListener("keydown", function handleFirstResponse(event) {
+        if (event.key === "Enter") {
+            const userResponse = userInput.value.trim();
+            if (userResponse) {
+                chatBox.innerHTML += `<p><strong>You:</strong> ${userResponse}</p>`;
+                userInput.value = ""; // Clear the input field
+
+                // Ask the next question
+                chatBox.innerHTML += `<p><strong>Bot:</strong> That’s a critical observation. I’ve cross-referenced your concern with the EU AI Act’s transparency guidelines and identified three real-world cases where explainability tools mitigated bias. Would you like me to:
+                <br>1. Break down these cases to compare with your perspective?
+                <br>2. Discuss ethical frameworks for addressing blackboxing?
+                <br>3. Save this topic to your ethics journal for future reference?</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+                // Remove the event listener to prevent duplicate responses
+                userInput.removeEventListener("keydown", handleFirstResponse);
+            }
+        }
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const stars = document.querySelectorAll(".star");
     const submitRatingButton = document.getElementById("submitRating");
@@ -270,6 +337,11 @@ document.addEventListener("DOMContentLoaded", () => {
         showPopup(rating); // Pass the rating to the showPopup function
         ratingContainer.style.display = "none";
         darkOverlay.style.display = "none"; // Hide rating after submission
+
+        // Trigger the chatbot with the first question
+        setTimeout(() => {
+            askPostRatingQuestions();
+        }, 1000); // Delay to ensure smooth transition
     });
 
     const userInput = document.getElementById("userInput");
@@ -283,16 +355,25 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         console.error("Element with id 'userInput' not found in the DOM.");
     }
+
+    const chatToggleButton = document.querySelector(".chat-toggle");
+    if (chatToggleButton) {
+        chatToggleButton.textContent = "Context Agent";
+    }
 });
 
 // Chatbot logic
 function toggleChat() {
-    let chatContainer = document.getElementById("chatContainer");
-    if (chatContainer.style.display === "none") {
-        chatContainer.style.display = "block";
+    const chatContainer = document.getElementById("chatContainer");
+    const chatToggleButton = document.querySelector(".chat-toggle");
+
+    if (chatContainer.style.display === "none" || chatContainer.style.display === "") {
+        chatContainer.style.display = "block"; // Show the chatbot
+        chatToggleButton.style.display = "none"; // Hide the button
         startChat();
     } else {
-        chatContainer.style.display = "none";
+        chatContainer.style.display = "none"; // Hide the chatbot
+        chatToggleButton.style.display = "block"; // Show the button
     }
 }
 
@@ -307,7 +388,10 @@ function showNextQuestion() {
     if (currentQuestion < questions.length) {
         document.getElementById("chatBox").innerHTML += `<p><strong>Bot:</strong> ${questions[currentQuestion]}</p>`;
     } else {
-        document.getElementById("chatBox").innerHTML += `<p><strong>Bot:</strong> Thank you for chatting with me! 😊</p>`;
+        document.getElementById("chatBox").innerHTML += `<p><strong>Bot:</strong> That’s a critical observation. I’ve cross-referenced your concern with the EU AI Act’s transparency guidelines and identified three real-world cases where explainability tools mitigated bias. Would you like me to:
+        <br>1. Break down these cases to compare with your perspective?
+        <br>2. Discuss ethical frameworks for addressing blackboxing?
+        <br>3. Save this topic to your ethics journal for future reference?</p>`;
         localStorage.setItem("chatAnswers", JSON.stringify(answers)); // Save to local storage
     }
 }
@@ -344,7 +428,7 @@ function showPopup(rating) {
 
     document.getElementById("yesButton").addEventListener("click", askForFriendInfo);
     document.getElementById("noButton").addEventListener("click", () => {
-        thankYouMessage.textContent = "Thanks for your feedback! I’ll share this with my colleague.";
+        thankYouMessage.textContent = "Thanks for your feedback! I’ll share this with the Recommender Agent.";
         setTimeout(() => {
             document.getElementById("thankYouPopup").style.display = "none";
         }, 2000);
@@ -378,3 +462,10 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
+
+// Add chat toggle button
+const chatToggleButton = document.createElement("button");
+chatToggleButton.className = "chat-toggle";
+chatToggleButton.textContent = "Context Agent";
+chatToggleButton.onclick = toggleChat;
+document.body.appendChild(chatToggleButton);
