@@ -267,14 +267,14 @@ function askForFeedback() {
     likeButton.addEventListener("click", () => {
         chatBox.innerHTML += `<p><strong>You:</strong> 👍 Like</p>`;
         chatBox.innerHTML += `<p><strong>Bot:</strong> Let's discuss why you liked this video. Have feedback? Tap me anytime!</p>`;
-        addFeedbackInput(chatBox, "liked"); // Display thank-you message
+        displayFinalFeedback(chatBox); // Display the final thank-you message
         chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
     });
 
     dislikeButton.addEventListener("click", () => {
         chatBox.innerHTML += `<p><strong>You:</strong> 👎 Dislike</p>`;
         chatBox.innerHTML += `<p><strong>Bot:</strong> Let's discuss why you didn't like this video. Have feedback? Tap me anytime!</p>`;
-        addFeedbackInput(chatBox, "didn't like"); // Display thank-you message
+        displayFinalFeedback(chatBox); // Display the final thank-you message
         chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
     });
 
@@ -282,8 +282,8 @@ function askForFeedback() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function addFeedbackInput(chatBox, feedbackType) {
-    // Directly display a thank-you message without creating input fields or buttons
+function displayFinalFeedback(chatBox) {
+    // Add the final thank-you message
     chatBox.innerHTML += `<p><strong>Bot:</strong> Thank you for your feedback! 😊</p>`;
     chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
 }
@@ -313,7 +313,7 @@ function askPostRatingQuestions() {
                 <br>1. Break down these cases to compare with your perspective?
                 <br>2. Discuss ethical frameworks for addressing blackboxing?
                 <br>3. Save this topic to your ethics journal for future reference?</p>`;
-                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom</br></br>
 
                 // Remove the event listener to prevent duplicate responses
                 userInput.removeEventListener("keydown", handleFirstResponse);
@@ -392,17 +392,7 @@ function startChat() {
     showNextQuestion();
 }
 
-function showNextQuestion() {
-    if (currentQuestion < questions.length) {
-        document.getElementById("chatBox").innerHTML += `<p><strong>Bot:</strong> ${questions[currentQuestion]}</p>`;
-    } else {
-        document.getElementById("chatBox").innerHTML += `<p><strong>Bot:</strong> That’s a critical observation. I’ve cross-referenced your concern with the EU AI Act’s transparency guidelines and identified three real-world cases where explainability tools mitigated bias. Would you like me to:
-        <br>1. Break down these cases to compare with your perspective?
-        <br>2. Discuss ethical frameworks for addressing blackboxing?
-        <br>3. Save this topic to your ethics journal for future reference?</p>`;
-        localStorage.setItem("chatAnswers", JSON.stringify(answers)); // Save to local storage
-    }
-}
+
 
 function sendMessage() {
     let userInput = document.getElementById("userInput").value.trim();
