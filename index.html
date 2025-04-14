@@ -8,15 +8,6 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
             rel="stylesheet">
-        <style>
-            video {
-                width: 80%;
-                max-width: 800px;
-                border: 3px solid #333;
-                border-radius: 15px; /* Rounded corners */
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-            }
-        </style>
     </head>
     <body>
         <button class="switch-button" onclick="location.href='page-b.html'">Go
@@ -30,9 +21,6 @@
                 Your browser does not support the video tag.
             </video>
         </div>
-
-        <!-- Dark overlay -->
-        <div class="dark-overlay" id="darkOverlay"></div>
 
         <!-- Rating System -->
         <div class="rating-container" id="ratingContainer">
@@ -49,19 +37,13 @@
         </div>
 
         <!-- Chatbot Section -->
-        <button class="chat-toggle" onclick="toggleChat()">Chat</button>
+        <button class="chat-toggle" onclick="toggleChat()">Context
+            Agent</button>
 
         <div class="chat-container" id="chatContainer" style="display: none;">
             <h3>Chatbot</h3>
             <div class="chat-box" id="chatBox"></div>
             <input id="userInput" type="text" placeholder="Type a message..." />
-        </div>
-
-        <!-- Thank you Popup -->
-        <div class="thank-you-popup" id="thankYouPopup" style="display: none;">
-            <p id="thankYouMessage"></p>
-            <button id="yesButton">Yes</button>
-            <button id="noButton">No</button>
         </div>
 
         <footer class="footer">

@@ -1,53 +1,31 @@
+/* General Styles */
 body {
     font-family: 'Roboto', sans-serif;
-    text-align: center;
     margin: 0;
-    padding: 20px 10px;
-    /* Add padding around the content */
-    position: relative;
-    background: url('background.jpg') no-repeat center center fixed;
-    background-size: cover;
+    padding: 0;
+    background-color: #f9f9f9;
     color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    /* Darken the overlay for better contrast */
-    z-index: -1;
+/* Header */
+h2 {
+    text-align: center;
+    margin-top: 20px;
+    color: #444;
 }
 
+/* Video Section */
 .video-container {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    margin: 0 auto;
-    margin-bottom: 30px;
-    /* Add spacing below the video */
-    padding-top: 20px;
-}
-
-video {
-    width: 80%;
-    max-width: 800px;
-    border: 3px solid black;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    /* Subtle shadow */
-}
-
-/* Dark overlay */
-.dark-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
 }
 
 /* Rating System */
@@ -56,24 +34,23 @@ video {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
     display: none;
-    background: white;
+    /* Hidden by default */
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Semi-transparent background */
+    color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.rating-container.show {
-    opacity: 1;
-    transform: scale(1);
+.rating-container h2 {
+    margin-bottom: 10px;
 }
 
 .star {
-    font-size: 40px;
+    font-size: 30px;
     color: gray;
     cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
@@ -89,200 +66,178 @@ video {
     color: gold;
 }
 
-/* Chatbot Styles */
+#submitRating {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#submitRating:hover {
+    background-color: #0056b3;
+}
+
+/* Chatbot Section */
 .chat-container {
-    width: 300px;
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: white;
-    border-radius: 15px;
-    /* Rounded corners */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    /* Subtle shadow */
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-container h3 {
+    background-color: #007bff;
+    color: white;
+    margin: 0;
     padding: 10px;
-    font-family: 'Roboto', sans-serif;
+    text-align: center;
 }
 
 .chat-box {
-    height: 200px;
-    overflow-y: auto;
-    border-bottom: 1px solid #ccc;
+    flex: 1;
     padding: 10px;
-    background: #f9f9f9;
-    /* Light background for chat messages */
-    border-radius: 10px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
 }
 
-.input-box {
-    display: flex;
-    margin-top: 5px;
+#userInput {
+    border: none;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.input-box input {
-    width: 80%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.input-box button {
-    width: 20%;
-    background: #007bff;
+/* Buttons */
+.switch-button,
+.chat-toggle {
+    padding: 10px 20px;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background-color 0.3s ease;
+    margin: 10px;
 }
 
-.input-box button:hover {
-    background: #0056b3;
-    /* Darker blue on hover */
+.switch-button:hover,
+.chat-toggle:hover {
+    background-color: #0056b3;
 }
 
+/* Style for the switch button in the top-left corner */
+.switch-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    /* Smaller padding */
+    font-size: 14px;
+    /* Smaller font size */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 1000;
+    /* Ensure it stays on top */
+}
+
+.switch-button:hover {
+    background-color: #0056b3;
+}
+
+/* Chat toggle button (Context Agent) */
 .chat-toggle {
     position: fixed;
-    /* Fixed position to stay in the same place */
     bottom: 20px;
-    /* Distance from the bottom of the screen */
+    /* Same as the chatbot */
     right: 20px;
-    /* Distance from the right of the screen */
+    /* Same as the chatbot */
+    padding: 10px 20px;
     background-color: #007bff;
-    /* Blue background */
     color: white;
-    /* White text */
     border: none;
-    /* Remove border */
     border-radius: 5px;
-    /* Rounded corners */
-    padding: 10px 15px;
-    /* Padding for the button */
-    font-size: 16px;
-    /* Font size */
     cursor: pointer;
-    /* Pointer cursor on hover */
+    transition: background-color 0.3s ease;
     z-index: 1000;
-    /* Ensure it appears above other elements */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /* Add a subtle shadow */
+    /* Ensure it stays on top */
 }
 
 .chat-toggle:hover {
     background-color: #0056b3;
-    /* Darker blue on hover */
 }
 
-/* Thank you popup */
-.thank-you-popup {
-    position: fixed;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-/* Info Popup */
-.info-popup {
-    position: absolute;
-    top: 10%;
-    /* Position it near the top of the video */
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    /* Dark background for contrast */
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 14px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    /* Subtle shadow */
-    z-index: 1000;
-    /* Ensure it appears above other elements */
-    transition: all 0.3s ease;
-    /* Smooth transition for hover effects */
-}
-
-.info-popup .info-sign {
-    font-size: 16px;
-    margin-left: 5px;
-    color: #00bfff;
-    /* Light blue for the info sign */
-    cursor: pointer;
-}
-
-.info-popup:hover {
-    background: rgba(0, 0, 0, 0.9);
-    /* Slightly darker on hover */
-}
-
-@media (max-width: 768px) {
-    video {
-        width: 100%;
-    }
-
-    .chat-container {
-        width: 90%;
-        bottom: 10px;
-        right: 5%;
-    }
-}
-
-/* Footer Styles */
+/* Footer container */
 .footer {
-    margin-top: 20px;
-    color: white;
-    font-size: 14px;
     display: flex;
+    /* Align items horizontally */
     align-items: center;
+    /* Vertically center the items */
     justify-content: center;
-    gap: 8px;
-    padding: 10px 0;
-    background: rgba(0, 0, 0, 0.6);
-    /* Add a semi-transparent background */
+    /* Center the content horizontally */
+    padding: 10px;
+    background-color: #f9f9f9;
+    color: #666;
+    font-size: 14px;
+    border-top: 1px solid #ccc;
 }
 
+/* Footer logo */
 .footer-logo {
-    width: 25px;
+    width: 40px;
+    /* Make the logo smaller */
     height: auto;
+    /* Maintain aspect ratio */
+    margin-right: 10px;
+    /* Add spacing between the logo and text */
 }
 
+/* Footer text */
 .footer-text {
     margin: 0;
-    font-size: 12px;
 }
 
-h2 {
+/* Info Icon and Tooltip */
+#infoIcon {
+    position: absolute;
+    top: 10%;
+    right: 10%;
     font-size: 24px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
-    /* Add a subtle shadow */
-    margin-bottom: 20px;
-}
-
-/* Switch Button */
-.switch-button {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 5px;
     z-index: 1000;
-    /* Ensure it stays above other elements */
 }
 
-.switch-button:hover {
-    background: #0056b3;
-    /* Darker blue on hover */
+#infoTooltip {
+    position: absolute;
+    top: 50px;
+    /* Adjust position below the icon */
+    right: 10%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+    display: none;
+    /* Hidden by default */
+    z-index: 1000;
 }

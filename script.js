@@ -140,42 +140,54 @@ function showVideoPopup() {
 }
 
 function showInfoPopup() {
-    // Check if the popup already exists to avoid duplicates
-    if (document.getElementById("infoPopup")) return;
+    // Check if the info icon already exists to avoid duplicates
+    if (document.getElementById("infoIcon")) return;
 
-    // Create the popup element
-    const popup = document.createElement("div");
-    popup.id = "infoPopup";
-    popup.className = "info-popup";
+    // Create the info icon element
+    const infoIcon = document.createElement("div");
+    infoIcon.id = "infoIcon";
+    infoIcon.textContent = "ℹ️"; // Info icon
+    infoIcon.style.position = "absolute";
+    infoIcon.style.top = "10%"; // Adjust position within the video player
+    infoIcon.style.right = "10%";
+    infoIcon.style.fontSize = "24px";
+    infoIcon.style.cursor = "pointer";
+    infoIcon.style.color = "white";
+    infoIcon.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    infoIcon.style.borderRadius = "50%";
+    infoIcon.style.padding = "5px";
+    infoIcon.style.zIndex = "1000";
 
-    // Add the title with an info sign
-    const title = document.createElement("div");
-    title.innerHTML = `AI Blackbox <span class="info-sign">ℹ️</span>`;
-    title.style.fontWeight = "bold";
-    title.style.marginBottom = "5px";
+    // Create the tooltip message
+    const tooltip = document.createElement("div");
+    tooltip.id = "infoTooltip";
+    tooltip.textContent = "A black box AI is an AI system whose internal workings are a mystery to its users.";
+    tooltip.style.position = "absolute";
+    tooltip.style.top = "50px"; // Position below the icon
+    tooltip.style.right = "10%";
+    tooltip.style.padding = "10px";
+    tooltip.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    tooltip.style.color = "white";
+    tooltip.style.borderRadius = "5px";
+    tooltip.style.fontSize = "14px";
+    tooltip.style.display = "none"; // Hidden by default
+    tooltip.style.zIndex = "1000";
 
-    // Add the detailed information
-    const details = document.createElement("div");
-    details.textContent = "Hover over the info sign for more details.";
-
-    // Add hover functionality to the info sign
-    const infoSign = title.querySelector(".info-sign");
-    infoSign.style.cursor = "pointer";
-    infoSign.title = "A black box AI is an AI system whose internal workings are a mystery to its users. Users can see the system’s inputs and outputs, but they can’t see what happens within the AI tool to produce those outputs.";
-
-    // Append the title and details to the popup
-    popup.appendChild(title);
-    popup.appendChild(details);
-
-    // Append the popup to the video container
+    // Append the tooltip to the video container
     const videoContainer = document.querySelector(".video-container");
     videoContainer.style.position = "relative"; // Ensure the container is positioned
-    videoContainer.appendChild(popup);
+    videoContainer.appendChild(infoIcon);
+    videoContainer.appendChild(tooltip);
 
-    // Remove the popup after 10 seconds
-    setTimeout(() => {
-        popup.remove();
-    }, 10000); // Lasts for 10 seconds
+    // Show the tooltip on hover
+    infoIcon.addEventListener("mouseover", () => {
+        tooltip.style.display = "block";
+    });
+
+    // Hide the tooltip when not hovering
+    infoIcon.addEventListener("mouseleave", () => {
+        tooltip.style.display = "none";
+    });
 }
 
 function showChatbotMessage() {
@@ -283,9 +295,32 @@ function askForFeedback() {
 }
 
 function displayFinalFeedback(chatBox) {
-    // Add the final thank-you message
-    chatBox.innerHTML += `<p><strong>Bot:</strong> Thank you for your feedback! 😊</p>`;
+    // Prompt the user for feedback
+    chatBox.innerHTML += `<p><strong>Bot:</strong> Before I thank you, could you share your thoughts?</p>`;
     chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+    const userInput = document.getElementById("userInput");
+
+    // Add an event listener to wait for the user's response
+    const handleUserResponse = (event) => {
+        if (event.key === "Enter") {
+            const userResponse = userInput.value.trim();
+            if (userResponse) {
+                // Display the user's response
+                chatBox.innerHTML += `<p><strong>You:</strong> ${userResponse}</p>`;
+                userInput.value = ""; // Clear the input field
+
+                // Show the final thank-you message
+                chatBox.innerHTML += `<p><strong>Bot:</strong> Thank you for your feedback! 😊</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+                // Remove the event listener to prevent duplicate responses
+                userInput.removeEventListener("keydown", handleUserResponse);
+            }
+        }
+    };
+
+    userInput.addEventListener("keydown", handleUserResponse);
 }
 
 function askPostRatingQuestions() {
@@ -322,34 +357,96 @@ function askPostRatingQuestions() {
     });
 }
 
+function startDiscussion(chatBox) {
+    // Ensure the chat container is visible
+    const chatContainer = document.getElementById("chatContainer");
+    chatContainer.style.display = "block";
+
+    // Ask the first question
+    chatBox.innerHTML += `<p><strong>Bot:</strong> How do you feel about the challenges of understanding AI decisions in fields like healthcare or criminal justice?</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+    const userInput = document.getElementById("userInput");
+
+    // Wait for the user's response to the first question
+    const handleFirstResponse = (event) => {
+        if (event.key === "Enter") {
+            const userResponse = userInput.value.trim();
+            if (userResponse) {
+                // Display the user's response
+                chatBox.innerHTML += `<p><strong>You:</strong> ${userResponse}</p>`;
+                userInput.value = ""; // Clear the input field
+
+                // Ask the second question
+                chatBox.innerHTML += `<p><strong>Bot:</strong> That’s a critical observation. I’ve cross-referenced your concern with the EU AI Act’s transparency guidelines and identified three real-world cases where explainability tools mitigated bias. Would you like me to:
+                <br>1. Break down these cases to compare with your perspective?
+                <br>2. Discuss ethical frameworks for addressing blackboxing?
+                <br>3. Save this topic to your ethics journal for future reference?</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+                // Wait for the user's response to the second question
+                const handleSecondResponse = (event) => {
+                    if (event.key === "Enter") {
+                        const secondResponse = userInput.value.trim();
+                        if (secondResponse) {
+                            // Display the user's response
+                            chatBox.innerHTML += `<p><strong>You:</strong> ${secondResponse}</p>`;
+                            userInput.value = ""; // Clear the input field
+
+                            // Provide a final response based on the user's choice
+                            if (secondResponse.includes("1")) {
+                                chatBox.innerHTML += `<p><strong>Bot:</strong> Great! Let me break down these cases for you...</p>`;
+                            } else if (secondResponse.includes("2")) {
+                                chatBox.innerHTML += `<p><strong>Bot:</strong> Let's discuss ethical frameworks for addressing blackboxing...</p>`;
+                            } else if (secondResponse.includes("3")) {
+                                chatBox.innerHTML += `<p><strong>Bot:</strong> I’ve saved this topic to your ethics journal for future reference.</p>`;
+                            } else {
+                                chatBox.innerHTML += `<p><strong>Bot:</strong> Thank you for your input! Let me know if you’d like to discuss further.</p>`;
+                            }
+
+                            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+                            userInput.removeEventListener("keydown", handleSecondResponse);
+                        }
+                    }
+                };
+
+                userInput.addEventListener("keydown", handleSecondResponse);
+                userInput.removeEventListener("keydown", handleFirstResponse);
+            }
+        }
+    };
+
+    userInput.addEventListener("keydown", handleFirstResponse);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+    const video = document.getElementById("videoPlayer");
+    const ratingContainer = document.getElementById("ratingContainer");
     const stars = document.querySelectorAll(".star");
     const submitRatingButton = document.getElementById("submitRating");
-    const darkOverlay = document.getElementById("darkOverlay");
-    const ratingContainer = document.getElementById("ratingContainer");
 
     let rating = 0; // Initialize the rating variable
 
+    // Show the rating system when the video ends
+    video.addEventListener("ended", () => {
+        ratingContainer.style.display = "block"; // Show the rating container
+    });
+
+    // Handle star selection
     stars.forEach(star => {
         star.addEventListener("click", function () {
             rating = parseInt(this.getAttribute("data-index")); // Update the rating variable
             stars.forEach((star, index) => {
                 star.style.color = index < rating ? "gold" : "gray";
             });
-            submitRatingButton.style.display = "block"; // Show submit button
+            submitRatingButton.style.display = "block"; // Show the submit button
         });
     });
 
+    // Handle rating submission
     submitRatingButton.addEventListener("click", () => {
-        localStorage.setItem("rating", rating); // Save the rating to localStorage
-        showPopup(rating); // Pass the rating to the showPopup function
-        ratingContainer.style.display = "none";
-        darkOverlay.style.display = "none"; // Hide rating after submission
-
-        // Trigger the chatbot with the first question
-        setTimeout(() => {
-            askPostRatingQuestions();
-        }, 1000); // Delay to ensure smooth transition
+        alert(`Thank you for rating this video ${rating} stars!`);
+        ratingContainer.style.display = "none"; // Hide the rating container after submission
     });
 
     const userInput = document.getElementById("userInput");
@@ -367,6 +464,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatToggleButton = document.querySelector(".chat-toggle");
     if (chatToggleButton) {
         chatToggleButton.textContent = "Context Agent";
+    }
+
+    if (!document.querySelector(".chat-toggle")) {
+        const chatToggleButton = document.createElement("button");
+        chatToggleButton.className = "chat-toggle";
+        chatToggleButton.textContent = "Context Agent";
+        chatToggleButton.onclick = toggleChat;
+        document.body.appendChild(chatToggleButton);
     }
 });
 
@@ -461,9 +566,4 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Add chat toggle button
-const chatToggleButton = document.createElement("button");
-chatToggleButton.className = "chat-toggle";
-chatToggleButton.textContent = "Context Agent";
-chatToggleButton.onclick = toggleChat;
-document.body.appendChild(chatToggleButton);
+
