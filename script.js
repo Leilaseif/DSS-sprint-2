@@ -4,7 +4,6 @@ let questions = [
 
 let currentQuestion = 0;
 let answers = JSON.parse(localStorage.getItem("chatAnswers")) || {}; // Load previous answers
-let rating = 0;
 
 // Video Player and Rating logic
 const video = document.getElementById("videoPlayer");
@@ -38,6 +37,11 @@ if (window.location.pathname.includes('index.html')) {
             const chatContainer = document.getElementById("chatContainer");
             const chatBox = document.getElementById("chatBox");
 
+            if (!chatBox) {
+                console.error("Element with id 'chatBox' not found in the DOM.");
+                return;
+            }
+
             // Ensure the chat container is visible
             if (chatContainer) {
                 chatContainer.style.display = "block";
@@ -56,6 +60,11 @@ if (window.location.pathname.includes('index.html')) {
             console.log("Page A: Chatbot shows AI training datasets text");
             const chatBox = document.getElementById("chatBox");
 
+            if (!chatBox) {
+                console.error("Element with id 'chatBox' not found in the DOM.");
+                return;
+            }
+
             // Add the AI training datasets text
             chatBox.innerHTML += `
                 <p><strong>Bot:</strong> AI training datasets are collections of data used to teach models how to make predictions. Selecting poor or biased data can lead to inaccurate, unfair, or unreliable AI outputs. Risks include amplifying societal biases, spreading misinformation, and ethical concerns around privacy. Ensuring diverse, high-quality datasets is critical for building trustworthy and effective AI systems.</p>
@@ -69,6 +78,11 @@ if (window.location.pathname.includes('index.html')) {
             console.log("Page A: Chatbot shows links");
 
             const chatBox = document.getElementById("chatBox");
+
+            if (!chatBox) {
+                console.error("Element with id 'chatBox' not found in the DOM.");
+                return;
+            }
 
             // Add the links to the chatbox
             if (chatBox) {
@@ -193,6 +207,12 @@ function showInfoPopup() {
 function showChatbotMessage() {
     // Check if the message already exists to avoid duplicates
     const chatBox = document.getElementById("chatBox");
+
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
+
     if (document.getElementById("chatbotMessage")) return;
 
     // Create the chatbot message
@@ -209,6 +229,11 @@ function openChatAndShowMessage() {
     const chatContainer = document.getElementById("chatContainer");
     const chatBox = document.getElementById("chatBox");
 
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
+
     // Ensure the chat container is visible
     chatContainer.style.display = "block";
 
@@ -224,8 +249,14 @@ function openChatWithMessage() {
     const chatContainer = document.getElementById("chatContainer");
     chatContainer.style.display = "block";
 
-    // Add the initial message to the chatbox
     const chatBox = document.getElementById("chatBox");
+
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
+
+    // Add the initial message to the chatbox
     chatBox.innerHTML += `<p><strong>Bot:</strong> Do you want to know more about AI training datasets?</p>`;
 
     // Add Yes/No buttons
@@ -266,6 +297,11 @@ function askForFeedback() {
     const chatContainer = document.getElementById("chatContainer");
     const chatBox = document.getElementById("chatBox");
 
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
+
     // Ensure the chat container is visible
     chatContainer.style.display = "block";
 
@@ -285,7 +321,7 @@ function askForFeedback() {
 
     dislikeButton.addEventListener("click", () => {
         chatBox.innerHTML += `<p><strong>You:</strong> 👎 Dislike</p>`;
-        chatBox.innerHTML += `<p><strong>Bot:</strong> Let's discuss why you didn't like this video. Have feedback? Tap me anytime!</p>`;
+        chatBox.innerHTML += `<p><strong>Bot:</strong> Let's discuss why you didn't like this video. Have feedback?</p>`;
         displayFinalFeedback(chatBox); // Display the final thank-you message
         chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
     });
@@ -295,9 +331,11 @@ function askForFeedback() {
 }
 
 function displayFinalFeedback(chatBox) {
-    // Prompt the user for feedback
-    chatBox.innerHTML += `<p><strong>Bot:</strong> Before I thank you, could you share your thoughts?</p>`;
-    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
+
 
     const userInput = document.getElementById("userInput");
 
@@ -327,6 +365,11 @@ function askPostRatingQuestions() {
     const chatContainer = document.getElementById("chatContainer");
     const chatBox = document.getElementById("chatBox");
 
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
+
     // Ensure the chat container is visible
     chatContainer.style.display = "block";
 
@@ -343,21 +386,20 @@ function askPostRatingQuestions() {
                 chatBox.innerHTML += `<p><strong>You:</strong> ${userResponse}</p>`;
                 userInput.value = ""; // Clear the input field
 
-                // Ask the next question
-                chatBox.innerHTML += `<p><strong>Bot:</strong> That’s a critical observation. I’ve cross-referenced your concern with the EU AI Act’s transparency guidelines and identified three real-world cases where explainability tools mitigated bias. Would you like me to:
-                <br>1. Break down these cases to compare with your perspective?
-                <br>2. Discuss ethical frameworks for addressing blackboxing?
-                <br>3. Save this topic to your ethics journal for future reference?</p>`;
-                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom</br></br>
-
-                // Remove the event listener to prevent duplicate responses
                 userInput.removeEventListener("keydown", handleFirstResponse);
+                // Note: handleSecondResponse is not defined here, so this would cause an error
+                // Fixed by removing this line
             }
         }
     });
 }
 
 function startDiscussion(chatBox) {
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
+
     // Ensure the chat container is visible
     const chatContainer = document.getElementById("chatContainer");
     chatContainer.style.display = "block";
@@ -378,7 +420,7 @@ function startDiscussion(chatBox) {
                 userInput.value = ""; // Clear the input field
 
                 // Ask the second question
-                chatBox.innerHTML += `<p><strong>Bot:</strong> That’s a critical observation. I’ve cross-referenced your concern with the EU AI Act’s transparency guidelines and identified three real-world cases where explainability tools mitigated bias. Would you like me to:
+                chatBox.innerHTML += `<p><strong>Bot:</strong> That's a critical observation. I've cross-referenced your concern with the EU AI Act's transparency guidelines and identified three real-world cases where explainability tools mitigated bias. Would you like me to:
                 <br>1. Break down these cases to compare with your perspective?
                 <br>2. Discuss ethical frameworks for addressing blackboxing?
                 <br>3. Save this topic to your ethics journal for future reference?</p>`;
@@ -394,14 +436,14 @@ function startDiscussion(chatBox) {
                             userInput.value = ""; // Clear the input field
 
                             // Provide a final response based on the user's choice
-                            if (secondResponse.includes("1")) {
+                            if (secondResponse.trim() === "1") {
                                 chatBox.innerHTML += `<p><strong>Bot:</strong> Great! Let me break down these cases for you...</p>`;
-                            } else if (secondResponse.includes("2")) {
+                            } else if (secondResponse.trim() === "2") {
                                 chatBox.innerHTML += `<p><strong>Bot:</strong> Let's discuss ethical frameworks for addressing blackboxing...</p>`;
-                            } else if (secondResponse.includes("3")) {
-                                chatBox.innerHTML += `<p><strong>Bot:</strong> I’ve saved this topic to your ethics journal for future reference.</p>`;
+                            } else if (secondResponse.trim() === "3") {
+                                chatBox.innerHTML += `<p><strong>Bot:</strong> I've saved this topic to your ethics journal for future reference.</p>`;
                             } else {
-                                chatBox.innerHTML += `<p><strong>Bot:</strong> Thank you for your input! Let me know if you’d like to discuss further.</p>`;
+                                chatBox.innerHTML += `<p><strong>Bot:</strong> Thank you for your input! Let me know if you'd like to discuss further.</p>`;
                             }
 
                             chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
@@ -432,13 +474,26 @@ document.addEventListener("DOMContentLoaded", () => {
         ratingContainer.style.display = "block"; // Show the rating container
     });
 
-    // Handle star selection
+    // Handle star selection - FIXED ITERATION ISSUE
     stars.forEach(star => {
         star.addEventListener("click", function () {
             rating = parseInt(this.getAttribute("data-index")); // Update the rating variable
-            stars.forEach((star, index) => {
-                star.style.color = index < rating ? "gold" : "gray";
+
+            // Clear all stars first
+            stars.forEach(s => {
+                s.style.color = "gray";
             });
+
+            // Then color the selected stars
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.style.color = "gold";
+                    s.classList.add("selected");
+                } else {
+                    s.classList.remove("selected");
+                }
+            });
+
             submitRatingButton.style.display = "block"; // Show the submit button
         });
     });
@@ -447,18 +502,15 @@ document.addEventListener("DOMContentLoaded", () => {
     submitRatingButton.addEventListener("click", () => {
         alert(`Thank you for rating this video ${rating} stars!`);
         ratingContainer.style.display = "none"; // Hide the rating container after submission
+        showPopup(rating); // Pass the rating to showPopup
     });
 
     const userInput = document.getElementById("userInput");
+    const chatBox = document.getElementById("chatBox");
 
-    if (userInput) {
-        userInput.addEventListener("keydown", (event) => {
-            if (event.key === "Enter") {
-                sendMessage(); // Trigger the sendMessage function
-            }
-        });
-    } else {
-        console.error("Element with id 'userInput' not found in the DOM.");
+    if (!userInput || !chatBox) {
+        console.error("Required elements not found in the DOM.");
+        return;
     }
 
     const chatToggleButton = document.querySelector(".chat-toggle");
@@ -492,16 +544,46 @@ function toggleChat() {
 
 function startChat() {
     let chatBox = document.getElementById("chatBox");
+
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
+
     chatBox.innerHTML = ""; // Clear chat
     currentQuestion = 0;
     showNextQuestion();
 }
 
+function showNextQuestion() {
+    const chatBox = document.getElementById("chatBox");
 
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
+
+    if (currentQuestion < questions.length) {
+        chatBox.innerHTML += `<p><strong>Bot:</strong> ${questions[currentQuestion]}</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    } else {
+        // No more questions, end the chat or provide a final message
+        chatBox.innerHTML += `<p><strong>Bot:</strong> Thank you for your feedback!</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Save the answers to localStorage
+        localStorage.setItem("chatAnswers", JSON.stringify(answers));
+    }
+}
 
 function sendMessage() {
     let userInput = document.getElementById("userInput").value.trim();
     let chatBox = document.getElementById("chatBox");
+
+    if (!chatBox) {
+        console.error("Element with id 'chatBox' not found in the DOM.");
+        return;
+    }
 
     if (userInput === "") return;
 
@@ -516,33 +598,59 @@ function sendMessage() {
 }
 
 // Add event listener for the Enter key in the input box
-const userInput = document.getElementById("userInput");
-userInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-        sendMessage(); // Trigger the sendMessage function
+document.addEventListener("DOMContentLoaded", () => {
+    const userInput = document.getElementById("userInput");
+    if (userInput) {
+        userInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                sendMessage(); // Trigger the sendMessage function
+            }
+        });
     }
 });
 
 // Thank you popup logic
 function showPopup(rating) {
     let thankYouMessage = document.getElementById("thankYouMessage");
+    if (!thankYouMessage) {
+        console.error("Element with id 'thankYouMessage' not found in the DOM.");
+        return;
+    }
     thankYouMessage.textContent = `I can share your ${rating}-star rating with your friends.`; // Use the passed rating
-    document.getElementById("thankYouPopup").style.display = "block";
 
-    document.getElementById("yesButton").addEventListener("click", askForFriendInfo);
-    document.getElementById("noButton").addEventListener("click", () => {
-        thankYouMessage.textContent = "Thanks for your feedback! I’ll share this with the Recommender Agent.";
-        setTimeout(() => {
-            document.getElementById("thankYouPopup").style.display = "none";
-        }, 2000);
-    });
+    const thankYouPopup = document.getElementById("thankYouPopup");
+    if (!thankYouPopup) {
+        console.error("Element with id 'thankYouPopup' not found in the DOM.");
+        return;
+    }
+    thankYouPopup.style.display = "block";
+
+    const yesButton = document.getElementById("yesButton");
+    const noButton = document.getElementById("noButton");
+
+    if (yesButton) {
+        yesButton.addEventListener("click", () => askForFriendInfo(rating));
+    }
+
+    if (noButton) {
+        noButton.addEventListener("click", () => {
+            thankYouMessage.textContent = "Thanks for your feedback! I'll share this with the Recommender Agent.";
+            setTimeout(() => {
+                thankYouPopup.style.display = "none";
+            }, 2000);
+        });
+    }
 }
 
-function askForFriendInfo() {
+function askForFriendInfo(rating) {
     let friendName = prompt("Enter your friend's name:");
     let friendNumber = prompt("Enter your friend's number:");
-    alert(`Thanks! I’ll share your ${rating}-star rating with ${friendName} (${friendNumber}).`);
-    document.getElementById("thankYouPopup").style.display = "none";
+    alert(`Thanks! I'll share your ${rating}-star rating with ${friendName} (${friendNumber}).`);
+
+    const thankYouPopup = document.getElementById("thankYouPopup");
+    if (thankYouPopup) {
+        thankYouPopup.style.display = "none";
+    }
 }
 
 // CSS for star rating
@@ -565,5 +673,4 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
-
 

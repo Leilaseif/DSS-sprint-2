@@ -121,53 +121,45 @@ h2 {
 }
 
 /* Buttons */
-.switch-button,
-.chat-toggle {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin: 10px;
-}
-
-.switch-button:hover,
-.chat-toggle:hover {
-    background-color: #0056b3;
-}
-
-/* Style for the switch button in the top-left corner */
 .switch-button {
     position: absolute;
+    /* Position it relative to the page */
     top: 10px;
+    /* Move it to the top */
     left: 10px;
+    /* Move it to the left */
     padding: 5px 10px;
-    /* Smaller padding */
-    font-size: 14px;
-    /* Smaller font size */
+    /* Make it smaller */
+    font-size: 12px;
+    /* Reduce the font size */
     background-color: #007bff;
+    /* Button background color */
     color: white;
+    /* Button text color */
     border: none;
+    /* Remove border */
     border-radius: 5px;
+    /* Add rounded corners */
     cursor: pointer;
+    /* Add pointer cursor */
     transition: background-color 0.3s ease;
+    /* Smooth hover effect */
     z-index: 1000;
     /* Ensure it stays on top */
 }
 
 .switch-button:hover {
     background-color: #0056b3;
+    /* Darker blue on hover */
 }
 
-/* Chat toggle button (Context Agent) */
 .chat-toggle {
     position: fixed;
+    /* Fix the button to the viewport */
     bottom: 20px;
-    /* Same as the chatbot */
+    /* Position it 20px from the bottom */
     right: 20px;
-    /* Same as the chatbot */
+    /* Position it 20px from the right */
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -181,36 +173,43 @@ h2 {
 
 .chat-toggle:hover {
     background-color: #0056b3;
+    /* Darker blue on hover */
 }
 
-/* Footer container */
+/* Footer */
 .footer {
     display: flex;
-    /* Align items horizontally */
+    /* Use flexbox for alignment */
     align-items: center;
-    /* Vertically center the items */
+    /* Vertically align items */
     justify-content: center;
     /* Center the content horizontally */
-    padding: 10px;
-    background-color: #f9f9f9;
-    color: #666;
-    font-size: 14px;
-    border-top: 1px solid #ccc;
+    padding: 10px 0;
+    /* Add some padding */
+    background-color: #f1f1f1;
+    /* Optional: Add a background color */
+    color: #333;
+    /* Optional: Set the text color */
+    width: 100%;
+    /* Make it span the full width of the page */
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+    /* Optional: Add a subtle shadow */
 }
 
-/* Footer logo */
 .footer-logo {
-    width: 40px;
-    /* Make the logo smaller */
+    width: 50px;
+    /* Adjust the width to make it smaller */
     height: auto;
-    /* Maintain aspect ratio */
+    /* Maintain the aspect ratio */
     margin-right: 10px;
     /* Add spacing between the logo and text */
 }
 
-/* Footer text */
 .footer-text {
-    margin: 0;
+    font-size: 14px;
+    /* Adjust the font size if needed */
+    color: #333;
+    /* Optional: Set the text color */
 }
 
 /* Info Icon and Tooltip */
@@ -240,4 +239,16 @@ h2 {
     display: none;
     /* Hidden by default */
     z-index: 1000;
+}
+
+/* DSS Logo */
+.dss-logo {
+    width: 100px;
+    /* Adjust the width to make it smaller */
+    height: auto;
+    /* Maintain the aspect ratio */
+    display: block;
+    /* Ensure it behaves like a block element */
+    margin: 0 auto;
+    /* Center the logo horizontally */
 }
