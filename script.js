@@ -98,6 +98,59 @@ if (window.location.pathname.includes('index.html')) {
                 console.error("Chat box not found in the DOM.");
             }
         }
+
+        if (Math.floor(video.currentTime) === 50 && !chatTriggered) {
+            console.log("Page A: Chatbot triggered with the critical observation question");
+            const chatContainer = document.getElementById("chatContainer");
+            const chatBox = document.getElementById("chatBox");
+
+            if (!chatBox) {
+                console.error("Element with id 'chatBox' not found in the DOM.");
+                return;
+            }
+
+            // Ensure the chat container is visible
+            chatContainer.style.display = "block";
+
+            // Add the question to the chatbox
+            chatBox.innerHTML += `<p><strong>Bot:</strong> That’s a critical observation. I’ve cross-referenced your concern with the EU AI Act’s transparency guidelines and identified three real-world cases where explainability tools mitigated bias. Would you like me to:
+            <br>1. Break down these cases to compare with your perspective?
+            <br>2. Discuss ethical frameworks for addressing blackboxing?
+            <br>3. Save this topic to your ethics journal for future reference?</p>`;
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+            // Wait for the user's response
+            const userInput = document.getElementById("userInput");
+            const handleResponse = (event) => {
+                if (event.key === "Enter") {
+                    const userResponse = userInput.value.trim();
+                    if (userResponse) {
+                        console.log("User response:", userResponse);
+
+                        // Display the user's response
+                        chatBox.innerHTML += `<p><strong>You:</strong> ${userResponse}</p>`;
+                        userInput.value = ""; // Clear the input field
+
+                        // Provide a final response based on the user's choice
+                        if (userResponse.trim() === "1") {
+                            chatBox.innerHTML += `<p><strong>Bot:</strong> Great! Let me break down these cases for you...</p>`;
+                        } else if (userResponse.trim() === "2") {
+                            chatBox.innerHTML += `<p><strong>Bot:</strong> Let's discuss ethical frameworks for addressing blackboxing...</p>`;
+                        } else if (userResponse.trim() === "3") {
+                            chatBox.innerHTML += `<p><strong>Bot:</strong> I've saved this topic to your ethics journal for future reference.</p>`;
+                        } else {
+                            chatBox.innerHTML += `<p><strong>Bot:</strong> Thank you for your input! Let me know if you'd like to discuss further.</p>`;
+                        }
+
+                        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+                        userInput.removeEventListener("keydown", handleResponse);
+                    }
+                }
+            };
+
+            userInput.addEventListener("keydown", handleResponse);
+            chatTriggered = true; // Prevent re-triggering
+        }
     });
 } else if (window.location.pathname.includes('page-b.html')) {
     console.log("Page B logic executed");
